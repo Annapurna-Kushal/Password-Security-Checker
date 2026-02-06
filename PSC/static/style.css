@@ -1,0 +1,250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6e0e70 0%, #e4bc19 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.card {
+    background: rgb(245, 226, 164);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    animation: bobbing 3s ease-in-out infinite;
+}
+
+@keyframes bobbing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #999;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+label {
+    display: block;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    font-family: 'Courier New', monospace;
+}
+
+input[type="password"]:focus,
+input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+    color: #764ba2;
+}
+
+.strength-meter {
+    background: #f0f0f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    background-color: #e0e0e0;
+}
+
+.strength-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.strength-label {
+    font-weight: 600;
+    font-size: 16px;
+    color: #666;
+}
+
+.strength-score {
+    color: #999;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.requirements {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.requirements h3 {
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.requirements ul {
+    list-style: none;
+}
+
+.requirements li {
+    color: #666;
+    font-size: 13px;
+    padding: 6px 0;
+    transition: all 0.3s ease;
+}
+
+.requirements li.pending {
+    color: #e74c3c;
+}
+
+.requirements li.completed {
+    color: #27ae60;
+}
+
+.suggestions {
+    background: #ccedcf;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    border-left: 4px solid #109447;
+}
+
+.suggestions h3 {
+    color: #27ae60;
+    font-size: 14px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.suggestions ul {
+    list-style: none;
+}
+
+.suggestions li.suggestion-item {
+    color: #2e7d32;
+    font-size: 13px;
+    padding: 8px 0;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+}
+
+.suggestions li.suggestion-item:hover {
+    padding-left: 8px;
+    color: #1b5e20;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .card {
+        padding: 25px;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+        padding: 10px 36px 10px 10px;
+        font-size: 14px;
+    }
+
+    .toggle-btn {
+        top: 34px;
+    }
+}

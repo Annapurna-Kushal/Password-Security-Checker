@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo-section">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Password Strength Checker Logo" class="logo">
+            </div>
+            <h1>Password Strength Checker</h1>
+            <p class="subtitle">Check how strong your password is</p>
+            
+            <div class="input-group">
+                <label for="password">Enter your password:</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Type your password here..."
+                    autocomplete="off"
+                >
+                <button class="toggle-btn" id="togglePassword">Show</button>
+            </div>
+            
+            <div class="strength-meter">
+                <div class="strength-bar" id="strengthBar"></div>
+            </div>
+            
+            <div class="strength-info">
+                <span class="strength-label" id="strengthLabel">-</span>
+                <span class="strength-score" id="strengthScore">-</span>
+            </div>
+            
+            <div class="requirements">
+                <h3>Password Requirements:</h3>
+                <ul id="feedbackList"></ul>
+            </div>
+
+            <div class="suggestions" id="suggestionsContainer" style="display: none;">
+                <h3>💡 How to Improve:</h3>
+                <ul id="suggestionsList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('togglePassword');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const strengthScore = document.getElementById('strengthScore');
+        const feedbackList = document.getElementById('feedbackList');
+        const suggestionsContainer = document.getElementById('suggestionsContainer');
+        const suggestionsList = document.getElementById('suggestionsList');
+
+        // Toggle password visibility
+        toggleBtn.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'Show';
+            }
+        });
+
+        // Check password strength on input
+        passwordInput.addEventListener('input', async () => {
+            const password = passwordInput.value;
+            
+            if (!password) {
+                resetDisplay();
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/check-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDisplay(data);
+                } else {
+                    resetDisplay();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        function updateDisplay(data) {
+            // Update strength bar
+            const percentage = (data.score / data.max_score) * 100;
+            strengthBar.style.width = percentage + '%';
+            strengthBar.style.backgroundColor = data.color;
+
+            // Update strength label and score
+            strengthLabel.textContent = data.strength;
+            strengthLabel.style.color = data.color;
+            strengthScore.textContent = `${data.score}/${data.max_score}`;
+
+            // Update feedback list
+            feedbackList.innerHTML = '';
+            if (data.feedback.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'completed';
+                li.textContent = '✓ Password is strong!';
+                feedbackList.appendChild(li);
+                suggestionsContainer.style.display = 'none';
+            } else {
+                data.feedback.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'pending';
+                    li.textContent = '✗ ' + item;
+                    feedbackList.appendChild(li);
+                });
+
+                // Display suggestions if available
+                if (data.suggestions && data.suggestions.length > 0) {
+                    suggestionsList.innerHTML = '';
+                    data.suggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.className = 'suggestion-item';
+                        li.textContent = suggestion;
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsContainer.style.display = 'block';
+                } else {
+                    suggestionsContainer.style.display = 'none';
+                }
+            }
+        }
+
+        function resetDisplay() {
+            strengthBar.style.width = '0%';
+            strengthBar.style.backgroundColor = '#e0e0e0';
+            strengthLabel.textContent = '-';
+            strengthLabel.style.color = '#666';
+            strengthScore.textContent = '-';
+            feedbackList.innerHTML = '';
+            suggestionsContainer.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
